@@ -1,0 +1,45 @@
+name: Create release and publish
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**.js'
+      - 'CHANGELOG.md'
+      - 'package.json'
+
+jobs:
+  release-please:
+    permissions:
+      contents: write # Permitir a criação do commit de release
+      pull-requests: write # Permitir a criação do PR de release
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prepare | Create github release
+        uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          release-type: node
+
+      - name: Prepare | Checkout repo
+        if: ${{ steps.release.outputs.release_created }}
+        uses: actions/checkout@v4
+
+      - name: Prepare | Configure Node+NPM
+        if: ${{ steps.release.outputs.release_created }}
+        uses: actions/setup-node@v4
+        with:
+          version: 22.x
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Prepare | Install deps
+        if: ${{ steps.release.outputs.release_created }}
+        run: npm ci
+
+      - name: Publish | Publish package to NPM
+        run: npm publish
+        if: ${{ steps.release.outputs.release_created }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
