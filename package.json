@@ -1,15 +1,18 @@
 {
-  "name": "workshop-gha-n7ff5",
+  "name": "@jpedrodelacerda/workshop-gha-n7ff5",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "João Lacerda <dev@jpedrodelacerda.com> (https://ddb.jpedrodelacerda.com/)",
+  "license": "(MIT OR Apache-2.0)",
   "description": "",
   "devDependencies": {
     "jest": "^29.7.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
